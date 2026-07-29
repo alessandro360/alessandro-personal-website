@@ -18,7 +18,7 @@
 
   .intro{
     position:relative;
-    min-height:92vh;
+    min-height:92svh;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -83,6 +83,12 @@
     font-size:0.8rem;
     font-weight:500;
     margin:0;
+  }
+
+  /* Mobile only — pulls the name/logo block and caption higher */
+  @media (max-width: 640px){
+    .intro{ min-height:78svh; }
+    .intro-caption{ bottom:130px; }
   }
 
   /* Tablet */
