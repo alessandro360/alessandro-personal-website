@@ -18,13 +18,13 @@
 
   .intro{
     position:relative;
-    min-height:92svh;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:50px 24px;
+    padding:80px 24px;
   }
 
   /* Base sizing = mobile */
@@ -85,10 +85,11 @@
     margin:0;
   }
 
-  /* Mobile only — pulls the name/logo block and caption higher */
+  /* Mobile only — pulls the name/logo block and caption higher, and uses svh
+     so the layout doesn't resize when the browser's address bar hides/shows */
   @media (max-width: 640px){
-    .intro{ min-height:78svh; }
-    .intro-caption{ bottom:130px; }
+    .intro{ min-height:78svh; padding:50px 24px; }
+    .intro-caption{ bottom:90px; }
   }
 
   /* Tablet */
