@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alessandro Scontus — Web Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Work+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:#1a2b21;
+    font-family:'Work Sans', sans-serif;
+  }
+
+  .intro{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:80px 24px;
+  }
+
+  /* Base sizing = mobile */
+  .intro-logo{
+    height:70px;
+    width:auto;
+    margin-bottom:16px;
+  }
+
+  .intro-name{
+    font-family:'Playfair Display', serif;
+    font-size:2rem;
+    font-weight:700;
+    color:#f2ecd9;
+    margin:0 0 20px;
+    line-height:1.1;
+  }
+
+  .intro-surname{
+    color:#c9a24a;
+  }
+
+  .intro-divider{
+    --divider-width: 100px;
+    width:var(--divider-width);
+    height:1px;
+    background:#c9a24a;
+    margin:0 auto 20px;
+  }
+
+  .intro-tagline{
+    color:#f2ecd9;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    font-size:0.78rem;
+    font-weight:600;
+    margin:0;
+  }
+
+  .intro-subtag{
+    color:#c9a24a;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    font-size:0.68rem;
+    font-weight:600;
+    margin:10px 0 0;
+  }
+
+  .intro-caption{
+    position:absolute;
+    left:24px;
+    right:24px;
+    bottom:80px;
+    color:rgba(242,236,217,0.6);
+    font-size:0.8rem;
+    font-weight:500;
+    margin:0;
+  }
+
+  /* Tablet */
+  @media (min-width: 641px){
+    .intro-logo{ height:90px; }
+    .intro-name{ font-size:2.5rem; }
+    .intro-divider{ --divider-width: 110px; }
+    .intro-tagline{ font-size:0.82rem; }
+  }
+
+  /* Desktop */
+  @media (min-width: 1025px){
+    .intro-logo{ height:110px; }
+    .intro-name{ font-size:3rem; }
+    .intro-divider{ --divider-width: 120px; }
+    .intro-tagline{ font-size:0.85rem; }
+  }
+
+  /* Staggered fade-in sequence: Alessandro -> Scontus -> divider (dot to line) -> tagline -> logo */
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes dividerGrow{
+    0%{ width:6px; height:6px; border-radius:50%; opacity:0; }
+    35%{ opacity:1; width:6px; height:6px; border-radius:50%; }
+    100%{ width:var(--divider-width); height:1px; border-radius:0; opacity:1; }
+  }
+
+  .name-first,
+  .intro-surname,
+  .intro-tagline,
+  .intro-subtag,
+  .intro-caption,
+  .intro-logo{
+    display:inline-block;
+    opacity:0;
+    animation: fadeUp 1.1s ease forwards;
+  }
+  .intro-name{ display:block; }
+  .intro-logo{ display:block; margin-left:auto; margin-right:auto; }
+
+  .name-first{ animation-delay: 0.3s; }
+  .intro-surname{ animation-delay: 1.3s; }
+  .intro-divider{
+    opacity:0;
+    animation: dividerGrow 1.4s ease forwards;
+    animation-delay: 2.3s;
+  }
+  .intro-tagline{
+    animation-duration: 1.5s;
+    animation-delay: 3.6s;
+  }
+  .intro-logo{
+    animation-duration: 1.2s;
+    animation-delay: 4.3s;
+  }
+  .intro-subtag{
+    animation-duration: 1s;
+    animation-delay: 5.3s;
+  }
+  .intro-caption{
+    animation-duration: 1s;
+    animation-delay: 5.3s;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .name-first,
+    .intro-surname,
+    .intro-tagline,
+    .intro-subtag,
+    .intro-caption,
+    .intro-logo,
+    .intro-divider{
+      animation:none;
+      opacity:1;
+    }
+  }
+
+  /* Applied once, the first time someone scrolls away before the intro finishes —
+     jumps everything straight to its finished state, permanently, no resume/replay */
+  body.skip-intro .name-first,
+  body.skip-intro .intro-surname,
+  body.skip-intro .intro-tagline,
+  body.skip-intro .intro-subtag,
+  body.skip-intro .intro-caption,
+  body.skip-intro .intro-logo{
+    animation:none;
+    opacity:1;
+    transform:none;
+  }
+  body.skip-intro .intro-divider{
+    animation:none;
+    opacity:1;
+    width:var(--divider-width);
+    height:1px;
+    border-radius:0;
+  }
+  body.skip-intro .site-header{
+    animation:none;
+    opacity:1;
+  }
+
+  /* Header — hidden during intro, fades in once the sequence finishes, then stays fixed */
+  .site-header{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px;
+    background:#1a2b21;
+    border-bottom:1.5px solid #c9a24a;
+    opacity:0;
+    animation: fadeUp 1s ease forwards;
+    animation-delay: 5.3s;
+  }
+  .header-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .site-header-name{
+    font-family:'Playfair Display', serif;
+    font-size:1.05rem;
+    font-weight:700;
+    color:#f2ecd9;
+    text-decoration:none;
+  }
+  .site-header-name span{
+    color:#c9a24a;
+  }
+
+  /* Burger — mobile default */
+  .burger{
+    background:none;
+    border:none;
+    padding:6px;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .burger span{
+    width:22px;
+    height:2px;
+    background:#f2ecd9;
+  }
+
+  /* Inline nav — hidden on mobile, shown from tablet up */
+  .site-nav{
+    display:none;
+    gap:28px;
+  }
+  .site-nav a{
+    color:#f2ecd9;
+    text-decoration:none;
+    font-size:0.85rem;
+    font-weight:600;
+    letter-spacing:0.03em;
+  }
+  .site-nav a:hover{
+    color:#c9a24a;
+  }
+
+  @media (min-width: 641px){
+    .burger{ display:none; }
+    .site-nav{ display:flex; }
+    .site-header{ padding:18px 24px; }
+    .site-header-name{ font-size:1.1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .site-header{
+      animation:none;
+      opacity:1;
+    }
+  }
+
+  /* Mobile drawer */
+  .drawer-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:70;
+  }
+  .drawer-overlay.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .drawer{
+    position:fixed;
+    top:0;
+    left:0;
+    height:100%;
+    width:76%;
+    max-width:300px;
+    background:#1a2b21;
+    z-index:80;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    padding:26px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .drawer.open{
+    transform:translateX(0);
+  }
+  .drawer-close{
+    align-self:flex-end;
+    background:none;
+    border:none;
+    color:#f2ecd9;
+    font-size:1.6rem;
+    cursor:pointer;
+    margin-bottom:18px;
+    padding:4px 8px;
+  }
+  .drawer-link{
+    text-decoration:none;
+    color:#f2ecd9;
+    font-size:1.1rem;
+    font-weight:600;
+    padding:14px 4px;
+    border-bottom:1px solid rgba(242,236,217,0.12);
+  }
+  .drawer-link:hover{
+    color:#c9a24a;
+  }
+
+  /* Structural section stubs — placeholders only, content/images come later */
+  .page-section{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:100px 24px;
+    background:#f2ecd9;
+    color:#1a2b21;
+    scroll-margin-top:90px;
+  }
+  .page-section h2{
+    font-family:'Playfair Display', serif;
+    font-size:2.2rem;
+    margin:0;
+  }
+
+  /* Contact section */
+  .page-section.contact-section{
+    min-height:0;
+    padding-top:70px;
+    padding-bottom:90px;
+  }
+  .contact-inner{
+    max-width:480px;
+  }
+  .contact-line{
+    margin:14px 0 0;
+    font-size:1.05rem;
+  }
+  .contact-line a{
+    color:#1a2b21;
+    text-decoration:none;
+    border-bottom:1px solid #c9a24a;
+  }
+  .contact-location{
+    color:#5a5142;
+  }
+
+  /* Footer */
+  .site-footer{
+    background:#1a2b21;
+    color:rgba(242,236,217,0.6);
+    text-align:center;
+    padding:24px;
+    font-size:0.85rem;
+  }
+  .site-footer p{
+    margin:0;
+  }
+  .page-section:nth-of-type(odd){
+    background:#ece4cf;
+  }
+
+  /* Work section — simple continuous marquee strip */
+  .work-section{
+    min-height:0;
+    flex-direction:column;
+    justify-content:flex-start;
+    gap:0;
+    padding:24px 0 32px;
+    background:linear-gradient(180deg, #f4efe0, #ecdfc0);
+  }
+  .marquee-wrap{
+    width:100%;
+    overflow:hidden;
+  }
+  .marquee-track{
+    display:flex;
+    gap:24px;
+    width:max-content;
+    padding:4px 24px 20px;
+    will-change:transform;
+  }
+  .project-card{
+    flex:0 0 auto;
+    width:min(520px, 84vw);
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 6px 18px rgba(26,43,33,0.12);
+    text-align:left;
+  }
+  .browser-chrome{
+    display:flex;
+    gap:6px;
+    padding:10px 12px;
+    background:#e4dcc4;
+  }
+  .browser-chrome span{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#c9a24a;
+    opacity:0.5;
+  }
+  .project-body{
+    height:320px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f2ecd9;
+    overflow:hidden;
+  }
+  .project-body img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:top;
+    display:block;
+  }
+  .project-caption{
+    font-family:'Playfair Display', serif;
+    font-size:1rem;
+    font-weight:700;
+    color:#1a2b21;
+    margin:0;
+    padding:14px 16px;
+    background:#fff;
+  }
+
+  /* Speed-up control — desktop/tablet only, mobile already has swipe-to-speed */
+  .speed-control-wrap{
+    display:none;
+    justify-content:center;
+    padding-top:20px;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .speed-control-wrap{ display:flex; }
+  }
+  .speed-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid #c9a24a;
+    background:transparent;
+    color:#1a2b21;
+    padding:10px 20px;
+    border-radius:999px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.8rem;
+    font-weight:600;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .speed-btn:hover, .speed-btn:focus-visible{
+    background:#c9a24a;
+    color:#1a2b21;
+  }
+  .speed-btn svg{
+    width:14px; height:14px;
+    flex-shrink:0;
+  }
+
+  /* About section */
+  .page-section.about-section{
+    min-height:0;
+    text-align:left;
+    align-items:flex-start;
+    padding-top:60px;
+    padding-bottom:70px;
+    background:#1a2b21;
+    color:#ffffff;
+  }
+  .about-inner{
+    max-width:640px;
+  }
+  .about-eyebrow{
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:#c9a24a;
+    margin:0 0 18px;
+  }
+  .about-inner h2{
+    text-align:left;
+    margin-bottom:22px;
+    color:#c9a24a;
+  }
+  .about-inner p{
+    font-size:1.05rem;
+    line-height:1.7;
+    margin:0 0 18px;
+    color:#ffffff;
+  }
+  .about-inner p:last-child{
+    margin-bottom:0;
+  }
+
+  /* Scroll-triggered fade-up for About text */
+  .about-eyebrow,
+  .about-inner h2,
+  .about-inner p{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .about-inner.in-view .about-eyebrow{
+    opacity:1; transform:translateY(0);
+    transition-delay:0s;
+  }
+  .about-inner.in-view h2{
+    opacity:1; transform:translateY(0);
+    transition-delay:0.12s;
+  }
+  .about-inner.in-view p:nth-of-type(1){ opacity:1; transform:translateY(0); transition-delay:0.24s; }
+  .about-inner.in-view p:nth-of-type(2){ opacity:1; transform:translateY(0); transition-delay:0.34s; }
+  .about-inner.in-view p:nth-of-type(3){ opacity:1; transform:translateY(0); transition-delay:0.44s; }
+  .about-inner.in-view p:nth-of-type(4){ opacity:1; transform:translateY(0); transition-delay:0.54s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .about-eyebrow, .about-inner h2, .about-inner p{
+      opacity:1; transform:none; transition:none;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-left">
+      <button class="burger" id="burgerBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="#home" class="site-header-name">Alessandro <span>Scontus</span></a>
+    </div>
+    <nav class="site-nav">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="#work" class="drawer-link">Work</a>
+    <a href="#about" class="drawer-link">About</a>
+    <a href="#contact" class="drawer-link">Contact</a>
+  </nav>
+
+  <section class="intro" id="home">
+    <img src="assets/as-monogram-final.png" alt="Alessandro Scontus logo" class="intro-logo">
+    <h1 class="intro-name"><span class="name-first">Alessandro</span> <span class="intro-surname">Scontus</span></h1>
+    <div class="intro-divider"></div>
+    <p class="intro-tagline">Web Designer</p>
+    <p class="intro-subtag">AI-Powered Website Design</p>
+    <p class="intro-caption">A growing portfolio of concept websites for small businesses.</p>
+  </section>
+
+  <section class="page-section work-section" id="work">
+    <div class="marquee-wrap">
+      <div class="marquee-track" id="marqueeTrack">
+        <div class="project-card">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ilgusto-full.png" alt="Il Gusto Italiano homepage"></div>
+          <p class="project-caption">Il Gusto Italiano</p>
+        </div>
+        <div class="project-card">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/golden-croissant-full.png" alt="The Golden Croissant homepage"></div>
+          <p class="project-caption">The Golden Croissant</p>
+        </div>
+        <div class="project-card">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/midnight-safari-full.png" alt="Midnight Safari Club homepage"></div>
+          <p class="project-caption">Midnight Safari Club</p>
+        </div>
+        <div class="project-card">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/rivenstone-full.png" alt="The Rivenstone homepage"></div>
+          <p class="project-caption">The Rivenstone</p>
+        </div>
+        <!-- duplicate set — enables a seamless loop, hidden from screen readers -->
+        <div class="project-card" aria-hidden="true">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ilgusto-full.png" alt=""></div>
+          <p class="project-caption">Il Gusto Italiano</p>
+        </div>
+        <div class="project-card" aria-hidden="true">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/golden-croissant-full.png" alt=""></div>
+          <p class="project-caption">The Golden Croissant</p>
+        </div>
+        <div class="project-card" aria-hidden="true">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/midnight-safari-full.png" alt=""></div>
+          <p class="project-caption">Midnight Safari Club</p>
+        </div>
+        <div class="project-card" aria-hidden="true">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/rivenstone-full.png" alt=""></div>
+          <p class="project-caption">The Rivenstone</p>
+        </div>
+      </div>
+    </div>
+    <div class="speed-control-wrap">
+      <button class="speed-btn" id="speedBtn" aria-label="Speed up the project preview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 5 4 12 11 19"></polyline><polyline points="20 5 13 12 20 19"></polyline></svg>
+        Speed up
+      </button>
+    </div>
+  </section>
+
+  <section class="page-section about-section" id="about">
+    <div class="about-inner">
+      <h2>About this portfolio</h2>
+      <p>All the websites shown here are concept projects, not real businesses.</p>
+      <p>They start from hospitality because it is the industry I know best, but the aim is to keep developing the work and apply the same approach to other independent businesses over time.</p>
+      <p>Each project helps me practise layout, visuals, structure, and the experience across mobile, tablet, and desktop.</p>
+      <p>This portfolio is still a work in progress, and more will be added over time.</p>
+    </div>
+  </section>
+
+  <section class="page-section contact-section" id="contact">
+    <div class="contact-inner">
+      <h2>Get in touch</h2>
+      <p class="contact-line"><a href="mailto:alessandro.scontus@gmail.com">alessandro.scontus@gmail.com</a></p>
+      <p class="contact-line"><a href="https://www.linkedin.com/in/alessandro-scontus/" target="_blank" rel="noopener">Connect on LinkedIn</a></p>
+      <p class="contact-line contact-location">Leeds, UK</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Alessandro Scontus</p>
+  </footer>
+
+<script>
+  // If someone scrolls away before the intro finishes, skip straight to the
+  // finished state — permanently, so scrolling back up never resumes/replays it
+  function skipIntroNow(){
+    document.body.classList.add('skip-intro');
+    window.removeEventListener('scroll', skipIntroNow);
+  }
+  window.addEventListener('scroll', skipIntroNow, { passive: true });
+
+  const burgerBtn = document.getElementById('burgerBtn');
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const drawerClose = document.getElementById('drawerClose');
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+  }
+  burgerBtn.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerOverlay.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(link => {
+    link.addEventListener('click', closeDrawer);
+  });
+
+  // Work section — simple continuous marquee, speeds up when you swipe the strip itself
+  const marqueeTrack = document.getElementById('marqueeTrack');
+  const marqueeWrap = document.querySelector('.marquee-wrap');
+  const workSection = document.getElementById('work');
+
+  let rafId = null;
+  let lastTs = null;
+  let inView = false;
+  let isTouching = false;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const baseSpeed = 36;       // normal gentle drift, px per second
+  const maxSpeed = 900;       // fastest drift while actively swiping
+  let effectiveSpeed = baseSpeed;
+  let trackOffset = 0;
+
+  function driftStep(ts){
+    if (lastTs === null) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    const setWidth = marqueeTrack.scrollWidth / 2; // width of one full set of 4 cards
+    trackOffset += effectiveSpeed * dt;
+    if (trackOffset >= setWidth) trackOffset -= setWidth;
+    if (trackOffset < 0) trackOffset += setWidth;
+    marqueeTrack.style.transform = `translateX(${-trackOffset}px)`;
+    // only ease back toward the normal gentle drift while the finger isn't actively moving it
+    if (!isTouching){
+      effectiveSpeed += (baseSpeed - effectiveSpeed) * 0.045;
+    }
+    rafId = requestAnimationFrame(driftStep);
+  }
+
+  function startAutoplay(){
+    stopAutoplay();
+    lastTs = null;
+    rafId = requestAnimationFrame(driftStep);
+  }
+  function stopAutoplay(){
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // Touch/swipe directly on the strip -> speeds it up in that direction while touching,
+  // then eases back to the normal gentle drift once you lift your finger
+  if (!prefersReducedMotion && marqueeWrap){
+    let lastX = 0;
+    let lastT = 0;
+
+    marqueeWrap.addEventListener('touchstart', (e) => {
+      isTouching = true;
+      lastX = e.touches[0].clientX;
+      lastT = performance.now();
+    }, { passive: true });
+
+    marqueeWrap.addEventListener('touchmove', (e) => {
+      const now = performance.now();
+      const x = e.touches[0].clientX;
+      const dx = x - lastX;
+      const dt = Math.max(now - lastT, 1);
+      lastX = x;
+      lastT = now;
+      // swiping left (dx negative) speeds up the drift's normal left-moving direction
+      const velocity = (-dx / dt) * 1000; // px per second
+      effectiveSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, velocity));
+    }, { passive: true });
+
+    marqueeWrap.addEventListener('touchend', () => {
+      isTouching = false;
+    }, { passive: true });
+
+    // Speed-up button on desktop/tablet — hold or hover to speed up,
+    // release/leave and it eases back to the normal gentle drift
+    const speedBtn = document.getElementById('speedBtn');
+    if (speedBtn){
+      const boostSpeed = 260;
+      let isBoosting = false;
+
+      speedBtn.addEventListener('mouseenter', () => { isBoosting = true; isTouching = true; });
+      speedBtn.addEventListener('mouseleave', () => { isBoosting = false; isTouching = false; });
+      speedBtn.addEventListener('focus', () => { isBoosting = true; isTouching = true; });
+      speedBtn.addEventListener('blur', () => { isBoosting = false; isTouching = false; });
+
+      // ease effectiveSpeed toward the boosted target while hovering/holding
+      const boostLoop = () => {
+        if (isBoosting){
+          effectiveSpeed += (boostSpeed - effectiveSpeed) * 0.06;
+        }
+        requestAnimationFrame(boostLoop);
+      };
+      boostLoop();
+    }
+  }
+
+  const marqueeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      inView = entry.isIntersecting;
+      if (inView) startAutoplay(); else stopAutoplay();
+    });
+  }, { threshold: 0.3 });
+  marqueeObserver.observe(workSection);
+
+  // About section — fade text up once it scrolls into view (fires once)
+  const aboutInner = document.querySelector('.about-inner');
+  if (aboutInner){
+    const aboutObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          aboutInner.classList.add('in-view');
+          aboutObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    aboutObserver.observe(aboutInner);
+  }
+</script>
+
+</body>
+</html>
