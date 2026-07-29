@@ -90,6 +90,7 @@
     .intro-name{ font-size:2.5rem; }
     .intro-divider{ --divider-width: 110px; }
     .intro-tagline{ font-size:0.82rem; }
+    .intro-caption{ font-size:1rem; max-width:520px; left:0; right:0; margin:0 auto; color:rgba(242,236,217,0.8); }
   }
 
   /* Desktop */
@@ -98,6 +99,7 @@
     .intro-name{ font-size:3rem; }
     .intro-divider{ --divider-width: 120px; }
     .intro-tagline{ font-size:0.85rem; }
+    .intro-caption{ font-size:1.15rem; max-width:600px; }
   }
 
   /* Staggered fade-in sequence: Alessandro -> Scontus -> divider (dot to line) -> tagline -> logo */
@@ -335,6 +337,12 @@
     font-family:'Playfair Display', serif;
     font-size:2.2rem;
     margin:0;
+  }
+  @media (min-width: 641px){
+    .page-section{ scroll-margin-top:150px; }
+  }
+  @media (min-width: 1025px){
+    .page-section{ scroll-margin-top:200px; }
   }
 
   /* Contact section */
