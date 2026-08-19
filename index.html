@@ -448,13 +448,27 @@
     display:block;
   }
   .project-caption{
+    position:relative;
     font-family:'Playfair Display', serif;
     font-size:1rem;
     font-weight:700;
     color:#1a2b21;
     margin:0;
-    padding:14px 16px;
-    background:#fff;
+    padding:18px 16px 14px;
+    background:#F3ECDC;
+  }
+  .project-caption::before{
+    content:"";
+    position:absolute;
+    top:-3px;
+    left:50%;
+    transform:translateX(-50%);
+    width:40px;
+    height:6px;
+    border-radius:999px;
+    background:#e0b054;
+    border:1px solid #1a2b21;
+    box-shadow:0 1px 3px rgba(0,0,0,0.35);
   }
 
   /* Speed-up control — desktop/tablet only, mobile already has swipe-to-speed */
@@ -580,7 +594,7 @@
   </nav>
 
   <section class="intro" id="home">
-    <img src="assets/as-monogram-final.png" alt="Alessandro Scontus logo" class="intro-logo" width="180" height="180" decoding="sync" fetchpriority="high">
+    <img src="assets/as-monogram-final.webp" alt="Alessandro Scontus logo" class="intro-logo" width="180" height="180" decoding="sync" fetchpriority="high">
     <h1 class="intro-name"><span class="name-first">Alessandro</span> <span class="intro-surname">Scontus</span></h1>
     <div class="intro-divider"></div>
     <p class="intro-tagline">Web Designer</p>
@@ -593,43 +607,53 @@
       <div class="marquee-track" id="marqueeTrack">
         <div class="project-card">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/ilgusto-full.png" alt="Il Gusto Italiano homepage"></div>
+          <div class="project-body"><img src="assets/ab-bridge-accounting.webp" alt="AB Bridge Accounting homepage"></div>
+          <p class="project-caption">AB Bridge Accounting</p>
+        </div>
+        <div class="project-card">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ilgusto-full.webp" alt="Il Gusto Italiano homepage"></div>
           <p class="project-caption">Il Gusto Italiano</p>
         </div>
         <div class="project-card">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/golden-croissant-full.png" alt="The Golden Croissant homepage"></div>
+          <div class="project-body"><img src="assets/golden-croissant-full.webp" alt="The Golden Croissant homepage"></div>
           <p class="project-caption">The Golden Croissant</p>
         </div>
         <div class="project-card">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/midnight-safari-full.png" alt="Midnight Safari Club homepage"></div>
+          <div class="project-body"><img src="assets/midnight-safari-full.webp" alt="Midnight Safari Club homepage"></div>
           <p class="project-caption">Midnight Safari Club</p>
         </div>
         <div class="project-card">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/rivenstone-full.png" alt="The Rivenstone homepage"></div>
+          <div class="project-body"><img src="assets/rivenstone-full.webp" alt="The Rivenstone homepage"></div>
           <p class="project-caption">The Rivenstone</p>
         </div>
         <!-- duplicate set — enables a seamless loop, hidden from screen readers -->
         <div class="project-card" aria-hidden="true">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/ilgusto-full.png" alt=""></div>
+          <div class="project-body"><img src="assets/ab-bridge-accounting.webp" alt=""></div>
+          <p class="project-caption">AB Bridge Accounting</p>
+        </div>
+        <div class="project-card" aria-hidden="true">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ilgusto-full.webp" alt=""></div>
           <p class="project-caption">Il Gusto Italiano</p>
         </div>
         <div class="project-card" aria-hidden="true">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/golden-croissant-full.png" alt=""></div>
+          <div class="project-body"><img src="assets/golden-croissant-full.webp" alt=""></div>
           <p class="project-caption">The Golden Croissant</p>
         </div>
         <div class="project-card" aria-hidden="true">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/midnight-safari-full.png" alt=""></div>
+          <div class="project-body"><img src="assets/midnight-safari-full.webp" alt=""></div>
           <p class="project-caption">Midnight Safari Club</p>
         </div>
         <div class="project-card" aria-hidden="true">
           <div class="browser-chrome"><span></span><span></span><span></span></div>
-          <div class="project-body"><img src="assets/rivenstone-full.png" alt=""></div>
+          <div class="project-body"><img src="assets/rivenstone-full.webp" alt=""></div>
           <p class="project-caption">The Rivenstone</p>
         </div>
       </div>
@@ -789,7 +813,13 @@
   const marqueeObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       inView = entry.isIntersecting;
-      if (inView) startAutoplay(); else stopAutoplay();
+      if (inView){
+        trackOffset = 0;
+        marqueeTrack.style.transform = `translateX(0px)`;
+        startAutoplay();
+      } else {
+        stopAutoplay();
+      }
     });
   }, { threshold: 0.3 });
   marqueeObserver.observe(workSection);
