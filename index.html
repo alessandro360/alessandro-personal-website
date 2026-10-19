@@ -34,6 +34,14 @@
     width:100%;
     height:auto;
   }
+  /* Phone: vertical hero sits directly under the header, full width, no gaps */
+  @media (max-width: 640px){
+    .hero-section{
+      padding-top:60px;
+      z-index:1;
+      box-shadow:0 22px 40px -6px rgba(0,0,0,0.58), 0 6px 16px rgba(0,0,0,0.28);
+    }
+  }
   @media (min-width: 641px){
     .hero-section{ padding-top:72px; }
   }
@@ -42,6 +50,8 @@
   @media (min-width: 1025px){
     .hero-section{
       padding:58px 32px 48px;
+      z-index:1;
+      box-shadow:0 14px 30px -6px rgba(0,0,0,0.36), 0 4px 12px rgba(0,0,0,0.16);
     }
     .hero-section img{
       position:relative;
@@ -498,7 +508,10 @@
   </nav>
 
   <section class="hero-section" id="home">
-    <img src="assets/Hero_Image.png" alt="Alessandro Scontus — AI-powered website design" width="1774" height="887" decoding="sync" fetchpriority="high">
+    <picture>
+      <source media="(max-width: 640px)" srcset="assets/Hero_Image_Mobile.webp" width="720" height="1153">
+      <img src="assets/Hero_Image.webp" alt="Alessandro Scontus — AI-powered website design" width="1774" height="887" decoding="sync" fetchpriority="high">
+    </picture>
   </section>
 
   <section class="page-section work-section" id="work">
