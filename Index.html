@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alessandro Scontus — Web Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600&family=Playfair+Display:wght@600;700&family=Work+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:#1c1a16;
+    font-family:'Work Sans', sans-serif;
+  }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  /* Hero — placeholder image, styling/positioning to be finalised later */
+  .hero-section{
+    position:relative;
+    width:100%;
+    overflow:hidden;
+    background:#000;
+    padding-top:64px;
+  }
+  .hero-section img{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+  /* Phone: vertical hero sits directly under the header, full width, no gaps */
+  @media (max-width: 640px){
+    .hero-section{
+      padding-top:60px;
+      z-index:1;
+      box-shadow:0 22px 40px -6px rgba(0,0,0,0.58), 0 6px 16px rgba(0,0,0,0.28);
+    }
+  }
+  @media (min-width: 641px){
+    .hero-section{ padding-top:72px; }
+  }
+
+  /* Desktop only — shrink the hero so it no longer runs full-bleed edge to edge */
+  @media (min-width: 1025px){
+    .hero-section{
+      padding:58px 32px 48px;
+      z-index:1;
+      box-shadow:0 14px 30px -6px rgba(0,0,0,0.36), 0 4px 12px rgba(0,0,0,0.16);
+    }
+    .hero-section img{
+      position:relative;
+      z-index:2;
+      max-width:1296px;
+      margin:0 auto;
+    }
+  }
+
+  /* Header — fixed, visible from the start (no intro to wait for anymore) */
+  .site-header{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 20px;
+    background:#000;
+    opacity:0;
+    animation: fadeUp 0.7s ease forwards;
+    animation-delay: 0.1s;
+  }
+  .header-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .site-header-name{
+    font-family:'Playfair Display', serif;
+    font-size:1.05rem;
+    font-weight:700;
+    color:#ffffff;
+    text-decoration:none;
+  }
+  .site-header-name span{
+    color:#A8D8F0;
+  }
+
+  /* Burger — mobile default */
+  .burger{
+    background:none;
+    border:none;
+    padding:6px;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .burger span{
+    width:22px;
+    height:2px;
+    background:#ece2cc;
+  }
+
+  /* Inline nav — hidden on mobile, shown from tablet up */
+  .site-nav{
+    display:none;
+    gap:28px;
+  }
+  .site-nav a{
+    color:#ffffff;
+    text-decoration:none;
+    font-size:0.85rem;
+    font-weight:600;
+    letter-spacing:0.03em;
+  }
+  .site-nav a:hover{
+    color:#48DDEB;
+  }
+
+  @media (min-width: 641px){
+    .burger{ display:none; }
+    .site-nav{ display:flex; }
+    .site-header{ padding:18px 24px; }
+    .site-header-name{ font-size:1.1rem; }
+  }
+
+  /* Desktop only — name ~15% larger */
+  @media (min-width: 1025px){
+    .site-header{ padding-top:17px; padding-bottom:17px; }
+    .site-header-name{ font-size:1.265rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .site-header{
+      animation:none;
+      opacity:1;
+    }
+  }
+
+  /* Mobile drawer */
+  .drawer-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:70;
+  }
+  .drawer-overlay.open{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .drawer{
+    position:fixed;
+    top:0;
+    left:0;
+    height:100%;
+    width:76%;
+    max-width:300px;
+    background:#1c1a16;
+    z-index:80;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    padding:26px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .drawer.open{
+    transform:translateX(0);
+  }
+  .drawer-close{
+    align-self:flex-end;
+    background:none;
+    border:none;
+    color:#ece2cc;
+    font-size:1.6rem;
+    cursor:pointer;
+    margin-bottom:18px;
+    padding:4px 8px;
+  }
+  .drawer-link{
+    text-decoration:none;
+    color:#ece2cc;
+    font-size:1.1rem;
+    font-weight:600;
+    padding:14px 4px;
+    border-bottom:1px solid rgba(236,226,204,0.12);
+  }
+  .drawer-link:hover{
+    color:#cfa365;
+  }
+
+  /* Structural section stubs — placeholders only, content/images come later */
+  .page-section{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:100px 24px;
+    background:#ece2cc;
+    color:#1c1a16;
+    scroll-margin-top:220px;
+  }
+  .page-section h2{
+    font-family:'Playfair Display', serif;
+    font-size:2.2rem;
+    margin:0;
+  }
+  @media (min-width: 641px){
+    .page-section{ scroll-margin-top:150px; }
+  }
+  @media (min-width: 1025px){
+    .page-section{ scroll-margin-top:200px; }
+  }
+
+  /* Contact section */
+  .page-section.contact-section{
+    min-height:0;
+    padding-top:70px;
+    padding-bottom:90px;
+    background:linear-gradient(180deg, #DCE8ED 0%, #EAF2F5 50%, #F8FBFC 100%);
+    color:#272727;
+  }
+  .page-section.contact-section h2{
+    font-family:'Manrope', 'Work Sans', sans-serif;
+    font-weight:600;
+    color:#152536;
+  }
+  .contact-inner{
+    max-width:480px;
+  }
+  .contact-line{
+    margin:14px 0 0;
+    font-size:1.05rem;
+  }
+  .contact-line a{
+    display:inline-block;
+    color:#272727;
+    text-decoration:none;
+    border-bottom:1px solid #272727;
+    transition:transform .2s ease;
+    transform-origin:left center;
+  }
+  .contact-line a:hover,
+  .contact-line a:focus-visible{
+    transform:scale(1.08);
+  }
+  .contact-location{
+    color:#4A4A4A;
+  }
+
+  /* Footer */
+  .site-footer{
+    background:#1c1a16;
+    color:rgba(236,226,204,0.85);
+    text-align:center;
+    padding:24px;
+    font-size:0.85rem;
+  }
+  .site-footer p{
+    margin:0;
+  }
+  .page-section:nth-of-type(odd){
+    background:#e3d5ae;
+  }
+
+  /* Work section — simple continuous marquee strip */
+  .work-section{
+    min-height:0;
+    flex-direction:column;
+    justify-content:flex-start;
+    gap:0;
+    padding:24px 0 32px;
+    background:#F1EEE7;
+  }
+  .marquee-wrap{
+    width:100%;
+    overflow:hidden;
+  }
+  .marquee-track{
+    display:flex;
+    gap:24px;
+    width:max-content;
+    padding:4px 24px 20px;
+    will-change:transform;
+  }
+  .project-card{
+    flex:0 0 auto;
+    width:min(520px, 84vw);
+    background:#fff;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 6px 16px rgba(0,0,0,0.18), 0 2px 5px rgba(0,0,0,0.10);
+    text-align:left;
+    display:block;
+    color:inherit;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .browser-chrome{
+    display:flex;
+    gap:6px;
+    padding:10px 12px;
+    background:#E4DED2;
+  }
+  .browser-chrome span{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#272727;
+    opacity:1;
+  }
+  .browser-chrome span:nth-child(1){ background:#D49A90; }
+  .browser-chrome span:nth-child(2){ background:#D8B981; }
+  .browser-chrome span:nth-child(3){ background:#A3BFB5; }
+  .project-body{
+    aspect-ratio:13/8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#E4DED2;
+    overflow:hidden;
+  }
+  .project-body img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:top;
+    display:block;
+  }
+  .project-caption{
+    position:relative;
+    font-family:'Playfair Display', serif;
+    font-size:1rem;
+    font-weight:700;
+    color:#272727;
+    margin:0;
+    padding:18px 16px 14px;
+    background:#E4DED2;
+  }
+  .project-caption::before{
+    content:"";
+    position:absolute;
+    top:-3px;
+    left:50%;
+    transform:translateX(-50%);
+    width:40px;
+    height:6px;
+    border-radius:999px;
+    background:#272727;
+    border:1px solid #272727;
+    box-shadow:0 1px 3px rgba(0,0,0,0.25);
+  }
+
+  /* Speed-up control — desktop/tablet only, mobile already has swipe-to-speed */
+  .speed-control-wrap{
+    display:none;
+    justify-content:center;
+    padding-top:20px;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .speed-control-wrap{ display:flex; }
+  }
+  .speed-btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid #263744;
+    background:#263744;
+    color:#F3F5F5;
+    padding:11px 22px;
+    border-radius:999px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.85rem;
+    font-weight:700;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    box-shadow:0 6px 16px rgba(0,0,0,0.28), 0 2px 4px rgba(0,0,0,0.20);
+    transition:background .2s ease, transform .15s ease, box-shadow .2s ease;
+  }
+  .speed-btn:hover, .speed-btn:focus-visible{
+    background:#263744;
+    transform:translateY(-1px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.32), 0 3px 6px rgba(0,0,0,0.22);
+  }
+  .speed-btn svg{
+    width:14px; height:14px;
+    flex-shrink:0;
+  }
+
+  /* About section */
+  .page-section.about-section{
+    min-height:0;
+    text-align:left;
+    align-items:flex-start;
+    padding-top:60px;
+    padding-bottom:70px;
+    background:#0B1520;
+    color:#E5E9ED;
+  }
+  .about-inner{
+    max-width:640px;
+  }
+  .about-eyebrow{
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:#cfa365;
+    margin:0 0 18px;
+  }
+  .about-inner h2{
+    text-align:left;
+    margin-bottom:22px;
+    color:#F3F5F7;
+  }
+  .about-inner h2 span{
+    color:#A8D8F0;
+  }
+  .about-inner p{
+    font-size:1.05rem;
+    line-height:1.7;
+    margin:0 0 14px;
+    color:#E5E9ED;
+  }
+  .about-inner p:last-child{
+    margin-bottom:0;
+  }
+
+  /* Scroll-triggered fade-up for About text */
+  .about-eyebrow,
+  .about-inner h2,
+  .about-inner p{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .about-inner.in-view .about-eyebrow{
+    opacity:1; transform:translateY(0);
+    transition-delay:0s;
+  }
+  .about-inner.in-view h2{
+    opacity:1; transform:translateY(0);
+    transition-delay:0.12s;
+  }
+  .about-inner.in-view p:nth-of-type(1){ opacity:1; transform:translateY(0); transition-delay:0.24s; }
+  .about-inner.in-view p:nth-of-type(2){ opacity:1; transform:translateY(0); transition-delay:0.34s; }
+  .about-inner.in-view p:nth-of-type(3){ opacity:1; transform:translateY(0); transition-delay:0.44s; }
+  .about-inner.in-view p:nth-of-type(4){ opacity:1; transform:translateY(0); transition-delay:0.54s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .about-eyebrow, .about-inner h2, .about-inner p{
+      opacity:1; transform:none; transition:none;
+    }
+  }
+
+  /* Scroll-triggered fade-up for Contact text (fires once) */
+  .contact-inner h2,
+  .contact-inner .contact-line{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  .contact-inner.in-view h2{ opacity:1; transform:translateY(0); transition-delay:0s; }
+  .contact-inner.in-view .contact-line:nth-of-type(1){ opacity:1; transform:translateY(0); transition-delay:0.12s; }
+  .contact-inner.in-view .contact-line:nth-of-type(2){ opacity:1; transform:translateY(0); transition-delay:0.22s; }
+  .contact-inner.in-view .contact-line:nth-of-type(3){ opacity:1; transform:translateY(0); transition-delay:0.32s; }
+  @media (prefers-reduced-motion: reduce){
+    .contact-inner h2, .contact-inner .contact-line{
+      opacity:1; transform:none; transition:none;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-left">
+      <button class="burger" id="burgerBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="#home" class="site-header-name">Alessandro <span>Scontus</span></a>
+    </div>
+    <nav class="site-nav">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+    <a href="#work" class="drawer-link">Work</a>
+    <a href="#about" class="drawer-link">About</a>
+    <a href="#contact" class="drawer-link">Contact</a>
+  </nav>
+
+  <section class="hero-section" id="home">
+    <picture>
+      <source media="(max-width: 640px)" srcset="assets/Hero_Image_Mobile.png" width="720" height="1153">
+      <img src="assets/Hero_Image.png" alt="Alessandro Scontus — AI-powered website design" width="1774" height="887" decoding="sync" fetchpriority="high">
+    </picture>
+  </section>
+
+  <section class="page-section work-section" id="work">
+    <div class="marquee-wrap">
+      <div class="marquee-track" id="marqueeTrack">
+        <a class="project-card" href="https://ab-bridge-accounting.netlify.app/" target="_blank" rel="noopener">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ab-bridge-accounting.webp" alt="AB Bridge Accounting homepage"></div>
+          <p class="project-caption">AB Bridge Accounting</p>
+        </a>
+        <a class="project-card" href="https://il-gusto-italiano.netlify.app/" target="_blank" rel="noopener">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ilgusto-full.webp" alt="Il Gusto Italiano homepage"></div>
+          <p class="project-caption">Il Gusto Italiano</p>
+        </a>
+        <a class="project-card" href="https://the-golden-croissant.netlify.app/" target="_blank" rel="noopener">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/golden-croissant-full.webp" alt="The Golden Croissant homepage"></div>
+          <p class="project-caption">The Golden Croissant</p>
+        </a>
+        <a class="project-card" href="https://midnight-safari-club.netlify.app/" target="_blank" rel="noopener">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/midnight-safari-full.webp" alt="Midnight Safari Club homepage"></div>
+          <p class="project-caption">Midnight Safari Club</p>
+        </a>
+        <a class="project-card" href="https://the-revenstone-hotel.netlify.app/" target="_blank" rel="noopener">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/rivenstone-full.webp" alt="The Rivenstone homepage"></div>
+          <p class="project-caption">The Rivenstone</p>
+        </a>
+        <!-- duplicate set — enables a seamless loop, hidden from screen readers -->
+        <a class="project-card" href="https://ab-bridge-accounting.netlify.app/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ab-bridge-accounting.webp" alt=""></div>
+          <p class="project-caption">AB Bridge Accounting</p>
+        </a>
+        <a class="project-card" href="https://il-gusto-italiano.netlify.app/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/ilgusto-full.webp" alt=""></div>
+          <p class="project-caption">Il Gusto Italiano</p>
+        </a>
+        <a class="project-card" href="https://the-golden-croissant.netlify.app/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/golden-croissant-full.webp" alt=""></div>
+          <p class="project-caption">The Golden Croissant</p>
+        </a>
+        <a class="project-card" href="https://midnight-safari-club.netlify.app/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/midnight-safari-full.webp" alt=""></div>
+          <p class="project-caption">Midnight Safari Club</p>
+        </a>
+        <a class="project-card" href="https://the-revenstone-hotel.netlify.app/" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">
+          <div class="browser-chrome"><span></span><span></span><span></span></div>
+          <div class="project-body"><img src="assets/rivenstone-full.webp" alt=""></div>
+          <p class="project-caption">The Rivenstone</p>
+        </a>
+      </div>
+    </div>
+    <div class="speed-control-wrap">
+      <button class="speed-btn" id="speedBtn" aria-label="Speed up the project preview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 5 4 12 11 19"></polyline><polyline points="20 5 13 12 20 19"></polyline></svg>
+        Speed up
+      </button>
+    </div>
+  </section>
+
+  <section class="page-section about-section" id="about">
+    <div class="about-inner">
+      <h2>About this <span>portfolio</span></h2>
+      <p>All the websites shown here are concept projects, not real businesses.</p>
+      <p>With a background in hospitality, I've started building concept websites for restaurants, cafés and other small businesses.</p>
+      <p>Each project gives me the opportunity to explore different ideas and improve my skills in layout, visuals, structure and user experience across mobile, tablet and desktop.</p>
+      <p>This portfolio will continue to grow as I develop new projects and explore different industries.</p>
+    </div>
+  </section>
+
+  <section class="page-section contact-section" id="contact">
+    <div class="contact-inner">
+      <h2>Get in touch</h2>
+      <p class="contact-line"><a href="mailto:hello@alessandroscontus.com">hello@alessandroscontus.com</a></p>
+      <p class="contact-line"><a href="https://www.linkedin.com/in/alessandro-scontus/" target="_blank" rel="noopener">Connect on LinkedIn</a></p>
+      <p class="contact-line contact-location">Leeds, UK</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 Alessandro Scontus</p>
+  </footer>
+
+<script>
+  const burgerBtn = document.getElementById('burgerBtn');
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const drawerClose = document.getElementById('drawerClose');
+
+  function openDrawer(){
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+  }
+  burgerBtn.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerOverlay.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-link').forEach(link => {
+    link.addEventListener('click', closeDrawer);
+  });
+
+  // Work section — simple continuous marquee, speeds up when you swipe the strip itself
+  const marqueeTrack = document.getElementById('marqueeTrack');
+  const marqueeWrap = document.querySelector('.marquee-wrap');
+  const workSection = document.getElementById('work');
+
+  let rafId = null;
+  let lastTs = null;
+  let inView = false;
+  let isTouching = false;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const baseSpeed = 36;       // normal gentle drift, px per second
+  const maxSpeed = 900;       // fastest drift while actively swiping
+  let effectiveSpeed = baseSpeed;
+  let trackOffset = 0;
+
+  function driftStep(ts){
+    if (lastTs === null) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+    const setWidth = marqueeTrack.scrollWidth / 2; // width of one full set of 4 cards
+    trackOffset += effectiveSpeed * dt;
+    if (trackOffset >= setWidth) trackOffset -= setWidth;
+    if (trackOffset < 0) trackOffset += setWidth;
+    marqueeTrack.style.transform = `translateX(${-trackOffset}px)`;
+    // only ease back toward the normal gentle drift while the finger isn't actively moving it
+    if (!isTouching){
+      effectiveSpeed += (baseSpeed - effectiveSpeed) * 0.045;
+    }
+    rafId = requestAnimationFrame(driftStep);
+  }
+
+  function startAutoplay(){
+    stopAutoplay();
+    lastTs = null;
+    rafId = requestAnimationFrame(driftStep);
+  }
+  function stopAutoplay(){
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // Touch/swipe directly on the strip -> speeds it up in that direction while touching,
+  // then eases back to the normal gentle drift once you lift your finger
+  if (!prefersReducedMotion && marqueeWrap){
+    let lastX = 0;
+    let lastT = 0;
+
+    marqueeWrap.addEventListener('touchstart', (e) => {
+      isTouching = true;
+      lastX = e.touches[0].clientX;
+      lastT = performance.now();
+    }, { passive: true });
+
+    marqueeWrap.addEventListener('touchmove', (e) => {
+      const now = performance.now();
+      const x = e.touches[0].clientX;
+      const dx = x - lastX;
+      const dt = Math.max(now - lastT, 1);
+      lastX = x;
+      lastT = now;
+      // swiping left (dx negative) speeds up the drift's normal left-moving direction
+      const velocity = (-dx / dt) * 1000; // px per second
+      effectiveSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, velocity));
+    }, { passive: true });
+
+    marqueeWrap.addEventListener('touchend', () => {
+      isTouching = false;
+    }, { passive: true });
+
+    // Speed-up button on desktop/tablet — hold or hover to speed up,
+    // release/leave and it eases back to the normal gentle drift
+    const speedBtn = document.getElementById('speedBtn');
+    if (speedBtn){
+      const boostSpeed = 260;
+      let isBoosting = false;
+
+      speedBtn.addEventListener('mouseenter', () => { isBoosting = true; isTouching = true; });
+      speedBtn.addEventListener('mouseleave', () => { isBoosting = false; isTouching = false; });
+      speedBtn.addEventListener('focus', () => { isBoosting = true; isTouching = true; });
+      speedBtn.addEventListener('blur', () => { isBoosting = false; isTouching = false; });
+
+      // ease effectiveSpeed toward the boosted target while hovering/holding
+      const boostLoop = () => {
+        if (isBoosting){
+          effectiveSpeed += (boostSpeed - effectiveSpeed) * 0.06;
+        }
+        requestAnimationFrame(boostLoop);
+      };
+      boostLoop();
+    }
+  }
+
+  const marqueeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      inView = entry.isIntersecting;
+      if (inView){
+        trackOffset = 0;
+        marqueeTrack.style.transform = `translateX(0px)`;
+        startAutoplay();
+      } else {
+        stopAutoplay();
+      }
+    });
+  }, { threshold: 0.3 });
+  marqueeObserver.observe(workSection);
+
+  // About section — fade text up once it scrolls into view (fires once)
+  const aboutInner = document.querySelector('.about-inner');
+  if (aboutInner){
+    const aboutObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          aboutInner.classList.add('in-view');
+          aboutObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    aboutObserver.observe(aboutInner);
+  }
+
+  // Contact section — same fade-up, once, the first time it scrolls into view
+  const contactInner = document.querySelector('.contact-inner');
+  if (contactInner){
+    const contactObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          contactInner.classList.add('in-view');
+          contactObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+    contactObserver.observe(contactInner);
+  }
+</script>
+
+</body>
+</html>
